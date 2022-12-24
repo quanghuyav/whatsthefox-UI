@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect, useContext } from 'react';
 import request from '../utils/request';
-import { Box, Button, TextField } from '@mui/material';
+import { Avatar, Box, Button, Stack, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { CurrentUserContext } from '../App';
 
 import socketIOClient from 'socket.io-client';
+import { Container, padding } from '@mui/system';
 
 function Home() {
     const socketRef = useRef();
@@ -47,53 +48,75 @@ function Home() {
             setPostToSend('');
         }
     };
+    const handleKeypress = (e) => {
+        //it triggers by pressing the enter key
+        if (e.key === 'Enter') {
+            handleSendPost();
+        }
+    };
 
     return (
-        <>
-            <div style={{ overflow: 'auto', height: 450, width: 700, margin: '0 auto' }}>
-                {posts.map((post) => (
-                    <div key={post._id || post.content} style={{ backgroundColor: '#ccc', margin: 10 }}>
-                        <div style={{ fontWeight: 700 }}>
-                            <img
-                                src={
-                                    post.author.avatar ||
-                                    'https://toigingiuvedep.vn/wp-content/uploads/2021/11/hinh-anh-meo-bua-buon-cuoi-le-luoi.jpg'
-                                }
-                                alt="avt"
-                                style={{ width: 20, height: 20 }}
-                            ></img>
-                            {post.author.name}
-                        </div>
-                        <div style={{ overflowWrap: 'break-word' }}>{post.content}</div>
-                    </div>
-                ))}
-            </div>
+        <Stack direction="row" sx={{ display: 'flex', backgroundColor: '#F5F6F7', paddingTop: '85px' }}>
+            <Container sx={{ flex: '25', width: '25%', display: { xs: 'none', md: 'block' } }}></Container>
+            <Container sx={{ flex: '50', width: '50%' }}>
+                <Stack spacing={1} sx={{ display: 'flex' }}>
+                    <>
+                        {!currentUser || (
+                            <Box
+                                sx={{
+                                    zIndex: 0,
+                                    display: 'flex',
+                                    alignItems: 'flex-end',
+                                }}
+                            >
+                                <TextField
+                                    id="input-with-sx"
+                                    label="What does the Fox say???"
+                                    variant="standard"
+                                    fullWidth
+                                    autoFocus
+                                    value={postToSend}
+                                    onChange={(e) => setPostToSend(e.target.value)}
+                                    autoComplete="off"
+                                    sx={{ overflowWrap: 'break-word' }}
+                                    onKeyPress={handleKeypress}
+                                />
 
-            <>
-                {!currentUser || (
-                    <Box
-                        position="fixed"
-                        sx={{ display: 'flex', alignItems: 'flex-end', bottom: 20, right: 10, left: 10 }}
-                    >
-                        <TextField
-                            id="input-with-sx"
-                            label="What does the Fox say???"
-                            variant="standard"
-                            fullWidth
-                            autoFocus
-                            value={postToSend}
-                            onChange={(e) => setPostToSend(e.target.value)}
-                            autoComplete="off"
-                            sx={{ overflowWrap: 'break-word' }}
-                        />
+                                <button style={{ backgroundColor: 'unset' }}>
+                                    <SendIcon color="success" onClick={handleSendPost} />
+                                </button>
+                            </Box>
+                        )}
+                    </>
+                    {posts.map((post) => (
+                        <Stack
+                            spacing={1}
+                            key={post._id || post.content}
+                            sx={{ backgroundColor: 'white', padding: '10px !important', borderRadius: '12px' }}
+                        >
+                            <Stack direction="row" spacing={0.5}>
+                                <Avatar
+                                    alt="concao"
+                                    src={
+                                        post.author.avatar ||
+                                        'https://toigingiuvedep.vn/wp-content/uploads/2021/11/hinh-anh-meo-bua-buon-cuoi-le-luoi.jpg'
+                                    }
+                                />
 
-                        <button style={{ backgroundColor: 'unset' }}>
-                            <SendIcon color="success" onClick={handleSendPost} />
-                        </button>
-                    </Box>
-                )}
-            </>
-        </>
+                                <Stack spacing={0.5}>
+                                    <div style={{ fontWeight: 700, fontSize: '18px', color: '#3898ff' }}>
+                                        {post.author.name}
+                                    </div>
+                                    <div style={{ fontSize: '12px', color: '#65676B' }}>{post.createdAt}</div>
+                                </Stack>
+                            </Stack>
+                            <div style={{ overflowWrap: 'break-word' }}>{post.content}</div>
+                        </Stack>
+                    ))}
+                </Stack>
+            </Container>
+            <Container sx={{ flex: '25', width: '25%', display: { xs: 'none', md: 'block' } }}></Container>
+        </Stack>
     );
 }
 

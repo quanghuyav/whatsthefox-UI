@@ -60,7 +60,6 @@ function Header() {
 
     return (
         <>
-            <div style={{ height: '70px' }}></div>
             <AppBar position="fixed" sx={{ zIndex: 10 }}>
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
@@ -160,12 +159,12 @@ function Header() {
                         <div>
                             {!currentUser || (
                                 <Box sx={{ flexGrow: 0 }}>
-                                    <div
-                                        style={{ margin: '0 15px', display: 'inline' }}
-                                    >{`Hello ${currentUser.name}`}</div>
+                                    <Typography
+                                        sx={{ margin: '0 15px', display: { xs: 'none', md: 'inline' } }}
+                                    >{`Hello ${currentUser.name}`}</Typography>
                                     <Tooltip title="Open settings">
                                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                            <Avatar alt="Remy Sharp" src={currentUser.avatar} />
+                                            <Avatar alt="concao" src={currentUser.avatar} />
                                         </IconButton>
                                     </Tooltip>
 
