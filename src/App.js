@@ -31,7 +31,7 @@ function App() {
     // get current user
     useEffect(() => {
         const token = localStorage.getItem('token');
-        console.log('rerender');
+        //console.log('rerender');
         request
             .get('/auth', {
                 headers: {
@@ -42,7 +42,7 @@ function App() {
             .catch((e) => console.log(e));
     }, []);
 
-    console.log('hello', currentUser);
+    //console.log('hello', currentUser);
     return (
         <Router>
             <div className="App">

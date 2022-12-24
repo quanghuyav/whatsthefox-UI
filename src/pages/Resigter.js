@@ -18,9 +18,6 @@ function Resigter() {
             .then((res) => {
                 avatar = res.image;
             })
-            .then(() => {
-                console.log(avatar);
-            })
             .catch((err) => {
                 console.log('loi call api avatar fox', err);
             });

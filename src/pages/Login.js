@@ -9,7 +9,7 @@ function Login() {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
-    console.log(currentUser);
+    //  console.log(currentUser);
 
     const handleLogin = () => {
         // gọi api dùng axios

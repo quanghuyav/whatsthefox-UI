@@ -19,13 +19,13 @@ function Home() {
             .then((res) => setPosts(res.data.data.posts))
             .catch((e) => console.log(e));
     }, []);
-    console.log('posst nè');
+    // console.log('posst nè');
 
     useEffect(() => {
-        console.log('gọi lại hàm khởi tạo socket');
+        //  console.log('gọi lại hàm khởi tạo socket');
         socketRef.current = socketIOClient('https://whats-the-fox.onrender.com');
         socketRef.current.on('sendDataServer', (data) => {
-            console.log(data);
+            // console.log(data);
             setPosts((prev) => [data, ...prev]);
         }); // mỗi khi có tin nhắn thì mess sẽ được render thêm
 
@@ -36,9 +36,9 @@ function Home() {
 
     const handleSendPost = () => {
         const token = localStorage.getItem('token');
-        console.log('gọi hàm gửi bài viết', postToSend);
+        // console.log('gọi hàm gửi bài viết', postToSend);
         if (postToSend.trim() !== '' && token !== null) {
-            console.log('guwir');
+            // console.log('guwir');
             const msg = {
                 content: postToSend,
                 token: token,
