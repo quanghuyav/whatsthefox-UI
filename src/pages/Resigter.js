@@ -1,17 +1,34 @@
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Alert, Box, Button, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CurrentUserContext } from '../App';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 import request from '../utils/request';
 
 function Resigter() {
     const [name, setName] = useState('');
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
+    const [openAlert, setOpenAlert] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
     const navigate = useNavigate();
     const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+    const handleOpenAlert = () => {
+        setOpenAlert(true);
+    };
+
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenAlert(false);
+    };
     const handleResigter = async () => {
         // gọi api ko dùng axios
+        await setIsLoading(true);
         var avatar;
         await fetch('https://randomfox.ca/floof')
             .then((res) => res.json())
@@ -30,11 +47,12 @@ function Resigter() {
                 setCurrentUser(res.data.data);
                 navigate('/');
             })
-            .catch((err) => console.log('loi', err));
+            .catch(handleOpenAlert);
+        await setIsLoading(false);
     };
 
     return (
-        <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', paddingTop: '85px' }}>
             <Stack component={'form'} spacing={3} width={'50vw'} minWidth={300} sx={{}}>
                 <Typography
                     color="secondary"
@@ -72,15 +90,29 @@ function Resigter() {
                     onChange={(e) => setPassword(e.target.value)}
                 />
 
-                <Button
+                <LoadingButton
                     id="submit"
                     variant="contained"
                     fullWidth
+                    loading={isLoading}
+                    startIcon={<HowToRegIcon></HowToRegIcon>}
+                    loadingPosition="start"
                     onClick={handleResigter}
                     sx={{ fontWeight: '600', color: 'white', fontFamily: 'monospace', fontSize: '20px' }}
                 >
                     Đăng ký
-                </Button>
+                </LoadingButton>
+                <Snackbar
+                    open={openAlert}
+                    autoHideDuration={2000}
+                    onClose={handleCloseAlert}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    sx={{ top: '60px!important' }}
+                >
+                    <Alert onClose={handleCloseAlert} severity="error" sx={{ width: '100%' }}>
+                        Đăng ký không thành công! Vui lòng thử lại!!!
+                    </Alert>
+                </Snackbar>
             </Stack>
         </div>
     );
