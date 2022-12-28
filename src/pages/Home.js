@@ -28,7 +28,7 @@ function Home() {
 
     useEffect(() => {
         //  console.log('gọi lại hàm khởi tạo socket');
-        socketRef.current = socketIOClient('https://whats-the-foxs.onrender.com');
+        socketRef.current = socketIOClient('https://whats-the-fox.onrender.com');
         socketRef.current.on('sendDataServer', (data) => {
             // console.log(data);
             setPosts((prev) => [data, ...prev]);
